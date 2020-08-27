@@ -89,16 +89,9 @@
     <Allegro_AddonPrimitives>true</Allegro_AddonPrimitives>
     <Allegro_AddonFont>true</Allegro_AddonFont>
     <Allegro_AddonColor>true</Allegro_AddonColor>
-    <Allegro_AddonVideo>true</Allegro_AddonVideo>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <Allegro_AddonImage>true</Allegro_AddonImage>
-    <Allegro_AddonTTF>true</Allegro_AddonTTF>
-    <Allegro_AddonPrimitives>true</Allegro_AddonPrimitives>
-    <Allegro_AddonFont>true</Allegro_AddonFont>
-    <Allegro_AddonColor>true</Allegro_AddonColor>
-    <Allegro_AddonVideo>true</Allegro_AddonVideo>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -158,10 +151,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameMenu.cpp" />
-    <ClCompile Include="HolaMundo.cpp" />
+    <ClCompile Include="Preguntas.cpp" />
     <ClCompile Include="Rueda.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mapa.h" />
+    <ClInclude Include="Preguntas.h" />
     <ClInclude Include="Rueda.h" />
   </ItemGroup>
   <ItemGroup>

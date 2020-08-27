@@ -6,10 +6,16 @@
 #include <stdio.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_native_dialog.h>
 #include "Rueda.h"
-
-//Funciona con las letras 1 y 2 para contestar preguntas
+#include "Preguntas.h"
+#include <time.h>
+#include <random>
+#include <windows.h> 
+/*Nota:
+    1- Las esctuturas estan al principio y el main al final.
+    2- Se cambiaron algunas variable a globales para reciclar.
+    3- Al hacer el cambio de pantalla mover el mouse
+*/
 
 using namespace std;
 //variables globales
@@ -18,18 +24,17 @@ ALLEGRO_COLOR rojo = al_map_rgba_f(0.5, 0, 0, 0.5);
 
 ALLEGRO_EVENT event;
 ALLEGRO_EVENT_QUEUE* queue;
-ALLEGRO_BITMAP* ruleta1;
-ALLEGRO_BITMAP* ruleta2;
-ALLEGRO_BITMAP* ruleta3;
-ALLEGRO_BITMAP* ruleta4;
+
 //explicacion pendiente
 int cargar;
-
+bool preguntaRepetida[4][5];
 //Declarar funciones
 void cambioMap(ALLEGRO_FONT*, ALLEGRO_COLOR, ALLEGRO_BITMAP*, int);
 bool entrarNivel1(ALLEGRO_FONT*, ALLEGRO_COLOR, ALLEGRO_BITMAP*, int);
 bool entrarNivel2(ALLEGRO_FONT*, ALLEGRO_COLOR, ALLEGRO_BITMAP*, int);
 bool entrarNivel3(ALLEGRO_FONT*, ALLEGRO_COLOR, ALLEGRO_BITMAP*, int);
+
+bool displayPregunta(ALLEGRO_FONT*, ALLEGRO_COLOR, ALLEGRO_BITMAP*, int, int);
 
 void must_init(bool test, const char* description)
 {
@@ -132,7 +137,9 @@ bool estruPunt(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgrou
         }
     }
 }
-
+int puntos = 0;
+string Puntos = "0";
+const char* PuntosS = "0";
 bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background)
 {
     int currentMap = 1;
@@ -153,7 +160,9 @@ bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgroun
     background = al_load_bitmap("mapa.jpeg");;
     al_draw_bitmap(background, 0, 0, 0);
     al_draw_text(font, al_map_rgb(0, 0, 0), 300, 0, 0, "Mapa");
-  
+    al_draw_filled_rectangle(150, 50, 170, 100, al_map_rgb(255, 0, 0));
+    al_draw_filled_triangle(140, 100, 180, 100, 160, 130, al_map_rgb(255, 0, 0));
+
     //bool refresh es para cargar el mapa nuevamente cuando se regresa de un nivel
     bool refresh = true;
     while (true) {
@@ -221,7 +230,12 @@ bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgroun
                     }
                     else if (currentMap == 2)
                     {
-                        entrarNivel2(font, color, background, currentMap);
+                        if (puntos == 5) {
+                            entrarNivel2(font, color, background, currentMap);
+                        }
+                        else {
+                            MessageBox(NULL, L"Lo sentimos no tiene suficientes puntos", L"Advertencia", MB_OK);
+                        }
                     }
                     else if (currentMap == 3)
                     {
@@ -238,20 +252,16 @@ bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgroun
             return true;
         }
     }
-    al_destroy_bitmap(background);
 }
-int puntos = 0;;
-string Puntos = "0";
-const char* PuntosS = "0";
 
 void cambioMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background, int currentMap) {
-
     //al_destroy_bitmap(background);
     al_clear_to_color(al_map_rgb(0, 0, 0));
     background = al_load_bitmap("mapa.jpeg");
     al_draw_bitmap(background, 0, 0, 0);
     al_draw_text(font, al_map_rgb(0, 0, 0), 300, 0, 0, "Mapa");
     botonVolver(font, color, background);
+
     if (currentMap == 1)
     {
         al_draw_filled_rectangle(150, 50, 170, 100, al_map_rgb(255, 0, 0));
@@ -269,224 +279,12 @@ void cambioMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgrou
     }
     al_flip_display();
 }
-//Nivel 1, 2 y 3 temporal, copia de estruMap solo tiene el boton de regresar
-bool pantallaP(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background,int r)
-{
-    Rueda rueda(0);
-    ALLEGRO_BITMAP* preguntas;
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-    bool done = false;
-    //imagen temporal
-    background = al_load_bitmap("nivel1.jpg");
-    al_draw_bitmap(background, 0, 0, 0);
-    
-    int pregunta = (rueda.random(2) + 1);
-    std::cout << pregunta;
-    //r es la categoria y pregunta seria la pregunta aleatoria
-    //Funciona con las letras 1 y 2 para contestar preguntas
-    if (r==1) {
-        if (pregunta == 1) {
-            preguntas = al_load_bitmap("images/arte/Parte1.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-        else if (pregunta == 2) {
-            preguntas = al_load_bitmap("images/arte/Parte2.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-    }
-    else if (r == 2) {
-        if (pregunta == 1) {
-            preguntas = al_load_bitmap("images/ciencia/Pciencia1.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-        else if (pregunta == 2) {
-            preguntas = al_load_bitmap("images/ciencia/Pciencia2.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-    }
-    else if (r == 3) {
-        if (pregunta == 1) {
-            preguntas = al_load_bitmap("images/historia/Phistoria1.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-        else if (pregunta == 2) {
-            preguntas = al_load_bitmap("images/historia/Phistoria2.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-    }
-    else if (r == 4) {
-        if (pregunta == 1) {
-            preguntas = al_load_bitmap("images/politica/Ppolitica1.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-        else if (pregunta == 2) {
-            preguntas = al_load_bitmap("images/politica/Ppolitica2.jpg");
-            al_draw_bitmap(preguntas, 40, 0, 0);
-        }
-    }
-    while (true) {
-      
-        al_wait_for_event(queue, &event);
-        switch (event.type)
-        {
 
-        case ALLEGRO_EVENT_KEY_DOWN:
-            if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
-                //al precionar esc vuelve al inicio
-                if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                    //imprimir en pantalla para comprobar que se preciono la tecla
-                    done = true;
-                    break;
-                }
-                if (event.keyboard.keycode == ALLEGRO_KEY_1) {
-                    if (r == 1) {
-                        if (pregunta == 1) {
-                            cout << "\nCORRECTO";
-                            
-                            done = true;
-                            puntos=puntos+1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                    }
-                    else if (r == 2) {
-                        if (pregunta == 1) {
-                            cout << "\nCORRECTO";
-                            puntos = puntos + 1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            done = true;
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                    }
-                    else if (r == 3) {
-                        if (pregunta == 1) {
-                            cout << "\nCORRECTO";
-                            puntos = puntos+ 1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            done = true;
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                    }
-                    else if (r == 4) {
-                        if (pregunta == 1) {
-                            cout << "\nCORRECTO";
-                            puntos = puntos + 1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            done = true;
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                    }
-                   
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_2) {
-                    if (r == 1) {
-                        if (pregunta == 1) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nCORRECTO";
-                            puntos = puntos + 1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            done = true;
-                            break;
-                        }
-                    }
-                    else if (r == 2) {
-                        if (pregunta == 1) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nCORRECTO";
-                            puntos = puntos + 1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            done = true;
-                            break;
-                        }
-                    }
-                    else if (r == 3) {
-                        if (pregunta == 1) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nCORRECTO";
-                            puntos = puntos + 1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            done = true;
-                            break;
-                        }
-                    }
-                    else if (r == 4) {
-                        if (pregunta == 1) {
-                            cout << "\nINCORRECTO";
-                            done = true;
-                            break;
-                        }
-                        else if (pregunta == 2) {
-                            cout << "\nCORRECTO";
-                            puntos = puntos + 1;
-                            Puntos = to_string(puntos);
-                            PuntosS = Puntos.c_str();
-                            done = true;
-                            break;
-                        }
-                    }
-                }//fin de teclas pregunta
-            }
-            break;
-        }
-        if (done) {
-            cargar = 0;
-            al_destroy_bitmap(background);
-            return true;
-        }
-        al_flip_display();
-    }
-}
-void rul1(ALLEGRO_BITMAP* ruleta) {
-    al_draw_bitmap(ruleta, 30, 40, 0);
-    al_rest(0.2);
-    al_flip_display();
-}
-//
+//Nivel 1, 2 y 3 temporal, copia de estruMap solo tiene el boton de regresar
+//Variables puntos
+
 bool entrarNivel1(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background, int currentMap) {
-    puntos = 0;
-    ruleta1 = al_load_bitmap("images/images_ruleta/rul1.png");
-    ruleta2 = al_load_bitmap("images/images_ruleta/rul2.png");
-    ruleta3 = al_load_bitmap("images/images_ruleta/rul3.png");
-    ruleta4 = al_load_bitmap("images/images_ruleta/rul4.png");
+
     al_clear_to_color(al_map_rgb(0, 0, 0));
     queue = al_create_event_queue();
     must_init(queue, "queue");
@@ -498,36 +296,60 @@ bool entrarNivel1(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backg
     al_register_event_source(queue, al_get_keyboard_event_source());
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     al_register_event_source(queue, al_get_timer_event_source(timer));
-    const char* p;
-    
+
     bool done = false;
-    Rueda rueda(0);
-    background = al_load_bitmap("nivel1.jpg");;
-    
-    al_draw_bitmap(background, 0, 0, 0);
+
+    string pregunta = "";
+    int respuesta = -1;
+    int randCat;
+    int randPreg;
+    float targetCat;
+
+    background = al_load_bitmap("nivel1.jpeg");;
+
+
     //botonVolver(font, color, background);
-    int r = 0;
+    Rueda rueda(0);
+
     al_start_timer(timer);
     while (true) {
-      
+        if (puntos == 5)
+        {
+            MessageBox(NULL, L"Se gano el juego.\nPuede avanzar al siguiente nivel.", L"Mensaje", MB_OK);
+            done = true;
+            break;
+        }
         color = azul;
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_bitmap(background, 0, 0, 0);
-        al_draw_text(font, al_map_rgb(0, 0, 0), 300, 0, 0, "Nivel 1");
-        al_draw_text(font, al_map_rgb(0, 0, 0), 600, 0, 0, "PUNTOS");
+        al_draw_text(font, al_map_rgb(255, 255, 255), 300, 0, 0, "Nivel 1");
+        al_draw_text(font, al_map_rgb(255, 255, 255), 600, 0, 0, "PUNTOS");
         al_draw_text(font, al_map_rgb(255, 255, 255), 660, 60, 0, PuntosS);
-        
         //botonVolver(font, color, background);
+        rueda.Draw();
+        al_draw_filled_triangle(230, 20, 270, 20, 250, 40, al_map_rgb(0, 0, 0));
         al_flip_display();
-        
         al_wait_for_event(queue, &event);
-       
+
         switch (event.type)
         {
+        case ALLEGRO_EVENT_MOUSE_AXES:
+            //pasa por cierto rango cambia de color
+            if (event.mouse.x > 670 && event.mouse.x < 800 && event.mouse.y>0 && event.mouse.y < 60) {
+                color = rojo;
+                //botonVolver(font, color, background);
+
+            }
+            else {
+                color = azul;
+                //botonVolver(font, color, background);
+            }
+            break;
+
         case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
             if (event.mouse.x > 670 && event.mouse.x < 800 && event.mouse.y>0 && event.mouse.y < 100) {
-               /* done = true;
-                color = azul;*/
+                done = true;
+                color = azul;
             }
             break;
         case ALLEGRO_EVENT_KEY_DOWN:
@@ -538,57 +360,200 @@ bool entrarNivel1(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backg
                     break;
                 }
                 else if (event.keyboard.keycode == ALLEGRO_KEY_G) {
-                    r = (rueda.random(4) + 1);
-                    cout << r<<"\n";
-                    for (int i = 0;i < 5;i++)//organiza para mostrar las imagenes
-                    {
-                        rul1(ruleta1);
-                        rul1(ruleta2);
-                        rul1(ruleta3);
-                        rul1(ruleta4);
+
+                    randCat = rand() % 4;
+                    randPreg = rand() % 5;
+                    while (preguntaRepetida[randCat][randPreg]) {
+                        randCat = rand() % 4;
+                        randPreg = rand() % 5;
                     }
-                    if (r == 1)// si el numero aleatorio es 1
-                    {
-                        rul1(ruleta1);
-                        al_rest(3);
-                    }
-                    if (r == 2)
-                    {
-                        rul1(ruleta2);
-                        al_rest(3);
-                    }
-                    if (r == 3)
-                    {
-                        rul1(ruleta3);
-                        al_rest(3);
-                    }
-                    if (r == 4)
-                    {
-                        rul1(ruleta4);
-                        al_rest(3);
-                    }
+                    preguntaRepetida[randCat][randPreg] = true;
+
+                    if (randCat == 0)
+                        targetCat = 5.10;
+                    else if (randCat == 1)
+                        targetCat = 3.5;
+                    else if (randCat == 2)
+                        targetCat = 1.9625;
+                    else if (randCat == 3)
+                        targetCat = 0.3925;
+
+                    rueda.setTargetF(targetCat);
                     break;
-                } 
+                }
+                else if (event.keyboard.keycode == ALLEGRO_KEY_R) {
+                    rueda.setTargetF(0);
+                    rueda.setAngulo(0);
+                    break;
+                }
+
             }
             break;
 
         case ALLEGRO_EVENT_TIMER:
             break;
         }
-        //REFERENCIA DE CARGA PREGUNTA
-        if (r == 3||r==1||r==2||r==4) {
-            pantallaP(font, color, background,r);
-            al_flip_display();
-            r = 0;
-            cout << "\nPuntos actuales:" << puntos;
+
+        if (rueda.getFin()) {
+            displayPregunta(font, color, background, randCat, randPreg);
+            rueda.setTargetF(0);
+            rueda.setAngulo(0);
         }
+
+        if (done) {
+            cargar = 0;
+            return true;
+        }
+
+    }
+}
+
+
+bool displayPregunta(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background, int cat, int pos) {
+    Preguntas preguntas;
+    ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 18, 0);
+
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    queue = al_create_event_queue();
+    must_init(queue, "queue");
+    must_init(al_init_image_addon(), "image");
+    must_init(al_install_mouse(), "mouse");
+    must_init(al_install_keyboard(), "keyboard");
+    must_init(al_init_primitives_addon(), "primitives");
+    al_register_event_source(queue, al_get_mouse_event_source());
+    al_register_event_source(queue, al_get_keyboard_event_source());
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
+    al_register_event_source(queue, al_get_timer_event_source(timer));
+
+    bool done = false;
+
+    string Categoria;
+
+    switch (cat) {
+    case 0:
+        Categoria = "Arte";
+        background = al_load_bitmap("arte.jpg");;
+        al_draw_bitmap(background, 0, 0, 0);
+        break;
+    case 1:
+        Categoria = "Politica";
+        background = al_load_bitmap("politica.jpg");;
+        al_draw_bitmap(background, 0, 0, 0);
+        break;
+    case 2:
+        Categoria = "Ciencia";
+        background = al_load_bitmap("ciencia.jpg");;
+        al_draw_bitmap(background, 0, 0, 0);
+        break;
+    case 3:
+        Categoria = "Historia";
+        background = al_load_bitmap("historia.jpg");;
+        al_draw_bitmap(background, 0, 0, 0);
+        break;
+    }
+
+    int respuesta = -1;
+
+
+
+   
+    al_draw_text(font, al_map_rgb(0, 0, 0), 300, 0, 0, Categoria.c_str());
+    //al_draw_text(font2, al_map_rgb(0, 0, 0), 100, 100, 0, preguntas.escogerPregunta(cat,pos).c_str());
+    al_draw_multiline_text(font2, al_map_rgb(0, 0, 0), 100, 100, 550, 40, 0, preguntas.escogerPregunta(cat, pos).c_str());
+    al_start_timer(timer);
+
+
+    while (true) {
+        color = azul;
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_draw_bitmap(background, 0, 0, 0);
+        al_draw_text(font, al_map_rgb(255, 255, 255), 300, 0, 0, Categoria.c_str());
+        //al_draw_text(font2, al_map_rgb(0, 0, 0), 100, 100, 0, preguntas.escogerPregunta(cat, pos).c_str());
+        al_draw_multiline_text(font2, al_map_rgb(0, 0, 0), 100, 100, 550, 40, 0, preguntas.escogerPregunta(cat, pos).c_str());
+        //botonVolver(font, color, background);
+        al_flip_display();
+        al_wait_for_event(queue, &event);
+
+        switch (event.type)
+        {
+        case ALLEGRO_EVENT_KEY_DOWN:
+            if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
+                if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                    done = true;
+                    color = azul;
+                    break;
+                }
+                else if (event.keyboard.keycode == ALLEGRO_KEY_1) {
+                    respuesta = 0;
+                    if (preguntas.escogerRespuesta(cat, pos) == respuesta) {
+                        puntos = puntos + 1;
+                        Puntos = to_string(puntos);
+                        PuntosS = Puntos.c_str();
+                        MessageBox(NULL, L"Correcto! :)", L"Repuesta", MB_OK);
+                    }
+                    else {
+                        MessageBox(NULL, L"Incorrecto :(", L"Repuesta", MB_OK);
+                    }
+                    done = true;
+                    break;
+
+                }
+                else if (event.keyboard.keycode == ALLEGRO_KEY_2) {
+                    respuesta = 1;
+                    if (preguntas.escogerRespuesta(cat, pos) == respuesta) {
+                        puntos = puntos + 1;
+                        Puntos = to_string(puntos);
+                        PuntosS = Puntos.c_str();
+                        MessageBox(NULL, L"Correcto! :)", L"Repuesta", MB_OK);
+                    }
+                    else {
+                        MessageBox(NULL, L"Incorrecto :(", L"Repuesta", MB_OK);
+                    }
+                    done = true;
+                    break;
+                }
+                else if (event.keyboard.keycode == ALLEGRO_KEY_3) {
+                    respuesta = 2;
+                    if (preguntas.escogerRespuesta(cat, pos) == respuesta) {
+                        puntos = puntos + 1;
+                        Puntos = to_string(puntos);
+                        PuntosS = Puntos.c_str();
+                        MessageBox(NULL, L"Correcto! :)", L"Repuesta", MB_OK);
+
+                    }
+                    else {
+                        MessageBox(NULL, L"Incorrecto :(", L"Repuesta", MB_OK);
+                    }
+                    done = true;
+                    break;
+                }
+                else if (event.keyboard.keycode == ALLEGRO_KEY_4) {
+                    respuesta = 3;
+                    if (preguntas.escogerRespuesta(cat, pos) == respuesta) {
+                        puntos = puntos + 1;
+                        Puntos = to_string(puntos);
+                        PuntosS = Puntos.c_str();
+                        MessageBox(NULL, L"Correcto!", L"Repuesta", MB_OK);
+                    }
+                    else {
+                        MessageBox(NULL, L"Incorrecto :(", L"Repuesta", MB_OK);
+                    }
+                    done = true;
+                    break;
+                }
+
+            }
+            break;
+
+        case ALLEGRO_EVENT_TIMER:
+            break;
+        }
+
         if (done) {
             cargar = 0;
             return true;
         }
     }
-    al_flip_display();
-    al_destroy_bitmap(background);
 }
 
 bool entrarNivel2(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background, int currentMap) {
@@ -717,9 +682,16 @@ bool entrarNivel3(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backg
 //Must init que atrapa cualquier error
 int main()
 {
+    srand(time(0));
     al_init();
     al_init_font_addon();
     al_init_ttf_addon();
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 5; j++) {
+            preguntaRepetida[i][j] = false;
+        }
+    }
 
     ALLEGRO_DISPLAY* display = al_create_display(800, 450);
     must_init(display, "display");
@@ -736,7 +708,7 @@ int main()
 
     must_init(al_init_primitives_addon(), "primitives");
 
-    ALLEGRO_BITMAP* background = al_load_bitmap("filo_background.jpeg");
+    ALLEGRO_BITMAP* background = al_load_bitmap("mapa_filo.jpeg");
     if (!background)
     {
         printf("No se cargo el background\n");
@@ -851,4 +823,3 @@ int main()
 
     return 0;
 }
-//Proyecto
