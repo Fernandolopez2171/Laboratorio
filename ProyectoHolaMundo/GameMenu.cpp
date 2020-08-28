@@ -327,7 +327,7 @@ bool entrarNivel1(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backg
         al_draw_text(font, al_map_rgb(255, 255, 255), 660, 60, 0, PuntosS);
         //botonVolver(font, color, background);
         rueda.Draw();
-        al_draw_filled_triangle(230, 20, 270, 20, 250, 40, al_map_rgb(0, 0, 0));
+        al_draw_filled_triangle(230, 50, 270, 50, 250, 70, al_map_rgb(0, 0, 0));
         al_flip_display();
         al_wait_for_event(queue, &event);
 

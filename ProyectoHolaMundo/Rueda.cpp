@@ -14,7 +14,7 @@ Rueda::Rueda(int target) :angulo(0), vuetas(3), targetF(target), background(al_l
 void Rueda::Draw()
 {
 	Girar(targetF);
-	al_draw_rotated_bitmap(background, 201, 195, 250, 225, angulo, 0);
+	al_draw_rotated_bitmap(background, 175, 174, 250, 225, angulo, 0);
 
 }
 
