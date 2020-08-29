@@ -51,16 +51,16 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
 
     //ANIMACION
 
-    const int maxFrame = 3;
+    const int maxFrame = 9;
     int curFrame = 0;
     int frameCount = 0;
-    int frameDelay = 30;
+    int frameDelay = 5;
 
-    ALLEGRO_BITMAP* sprite1[maxFrame];
+    ///ALLEGRO_BITMAP* sprite1[maxFrame];
 
-    sprite1[0] = al_load_bitmap("1Psprite.png");
-    sprite1[1] = al_load_bitmap("1Psprite.png");
-    sprite1[2] = al_load_bitmap("1Psprite.png");
+    //sprite1[0] = al_load_bitmap("1Psprite.png");
+    //sprite1[1] = al_load_bitmap("1Psprite.png");
+    //sprite1[2] = al_load_bitmap("1Psprite.png");
 
 
 
@@ -76,9 +76,6 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         al_draw_filled_rectangle(((float)vida2P / 100) * (180) + 510, 60, 690, 90, al_map_rgb(255, 0, 0));
 
         al_draw_text(font, al_map_rgb(0, 0, 0), 300, 400, 0, Preguntas[posicion].c_str());
-
-        
-        al_draw_bitmap_region(sprite1P, 0, 135, 90, 271, 500, 200, ALLEGRO_FLIP_HORIZONTAL);
 
         if (listo1P) 
         {
@@ -193,9 +190,27 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
                 al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 100, 200, 0);
                 break;
             case 1:
-                al_draw_bitmap_region(sprite1P, 450, 135, 100, 135, 250, 200, 0);
+                al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 150, 200, 0);
                 break;
             case 2:
+                al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 180, 200, 0);
+                break;
+            case 3:
+                al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 220, 200, 0);
+                break;
+            case 4:
+                al_draw_bitmap_region(sprite1P, 450, 135, 100, 135, 250, 200, 0);
+                break;
+            case 5:
+                al_draw_bitmap_region(sprite1P, 450, 135, 100, 135, 300, 200, 0);
+                break;
+            case 6:
+                al_draw_bitmap_region(sprite1P, 450, 135, 100, 135, 350, 200, 0);
+                break;
+            case 7:
+                al_draw_bitmap_region(sprite1P, 600, 135, 110, 135, 420, 200, 0);
+                break;
+            case 8:
                 al_draw_bitmap_region(sprite1P, 600, 135, 110, 135, 420, 200, 0);
                 break;
             }
@@ -204,6 +219,43 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         {
             al_draw_bitmap_region(sprite1P, 0, 135, 90, 271, 100, 200, 0);
 
+        }
+
+        if(ataca2P)
+        {
+            switch (curFrame)
+            {
+            case 0:
+                al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 420, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 1:
+                al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 370, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 2:
+                al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 320, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 3:
+                al_draw_bitmap_region(sprite1P, 300, 135, 100, 135, 280, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 4:
+                al_draw_bitmap_region(sprite1P, 450, 135, 100, 135, 240, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 5:
+                al_draw_bitmap_region(sprite1P, 450, 135, 100, 135, 200, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 6:
+                al_draw_bitmap_region(sprite1P, 450, 135, 100, 135, 180, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 7:
+                al_draw_bitmap_region(sprite1P, 600, 135, 110, 135, 150, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            case 8:
+                al_draw_bitmap_region(sprite1P, 600, 135, 110, 135, 150, 200, ALLEGRO_FLIP_HORIZONTAL);
+                break;
+            }
+        }
+        else {
+            al_draw_bitmap_region(sprite1P, 0, 135, 90, 271, 500, 200, ALLEGRO_FLIP_HORIZONTAL);
         }
 
         if (respuesta1P != -1 && respuesta2P != -1) 
@@ -235,9 +287,9 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         if (done) {
             al_destroy_bitmap(sprite1P);
             al_destroy_bitmap(sprite2P);
-            for (int i = 0;i < maxFrame;i++) {
+            /*for (int i = 0;i < maxFrame;i++) {
                 al_destroy_bitmap(sprite1[i]);
-            }
+            }*/
             return;
         }
     }
@@ -248,53 +300,4 @@ void Nivel2::must_init(bool test, const char* description)
     if (test) return;
     printf("couldn't initialize %s\n", description);
     exit(1);
-}
-
-void Nivel2::ataca1(ALLEGRO_BITMAP* sprite1P, ALLEGRO_BITMAP* sprite2P, ALLEGRO_FONT* font, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_EVENT event) 
-{
-
-    ALLEGRO_TIMER* timer = al_create_timer(1.0);
-    al_register_event_source(queue, al_get_timer_event_source(timer));
-    al_draw_bitmap_region(sprite1P, 0, 135, 90, 271, 100, 200, 0);
-    al_draw_bitmap_region(sprite1P, 0, 135, 90, 271, 500, 200, ALLEGRO_FLIP_HORIZONTAL);
-
-    while (true) {
-
-        al_clear_to_color(al_map_rgb(255, 255, 255));
-        //al_draw_bitmap(background, 0, 0, 0);
-        al_draw_filled_rectangle(100, 50, 300, 100, al_map_rgb(0, 0, 0));
-        al_draw_filled_rectangle(110, 60, ((float)vida1P / 100) * (180) + 110, 90, al_map_rgb(0, 255, 0));
-        al_draw_filled_rectangle(((float)vida1P / 100) * (180) + 110, 60, 290, 90, al_map_rgb(255, 0, 0));
-        al_draw_filled_rectangle(500, 50, 700, 100, al_map_rgb(0, 0, 0));
-        al_draw_filled_rectangle(510, 60, ((float)vida2P / 100) * (180) + 510, 90, al_map_rgb(0, 255, 0));
-        al_draw_filled_rectangle(((float)vida2P / 100) * (180) + 510, 60, 690, 90, al_map_rgb(255, 0, 0));
-
-
-        
-
-        if (listo1P)
-        {
-            al_draw_text(font, al_map_rgb(255, 0, 0), 100, 110, 0, "LISTO");
-        }
-
-        if (listo2P)
-        {
-            al_draw_text(font, al_map_rgb(255, 0, 0), 500, 110, 0, "LISTO");
-        }
-        //al_draw_text(font2, al_map_rgb(0, 0, 0), 100, 100, 0, preguntas.escogerPregunta(cat, pos).c_str());
-        //botonVolver(font, color, background);
-        al_flip_display();
-        al_wait_for_event(queue, &event);
-
-        switch (event.type)
-        {
-        
-        case ALLEGRO_EVENT_TIMER:
-            break;
-        }
-
-        al_draw_bitmap_region(sprite1P, 0, 135, 90, 271, 100, 200, 0);
-        al_draw_bitmap_region(sprite1P, 200, 135, 290, 271, 500, 200, ALLEGRO_FLIP_HORIZONTAL);
-
-    }
 }

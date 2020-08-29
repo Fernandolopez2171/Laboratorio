@@ -25,7 +25,5 @@ private:
 	int respuestas[5];
 	void must_init(bool, const char*);
 
-	void ataca1(ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_FONT*, ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT);
-	//void ataca2(ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_FONT*, ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT);
 };
 #endif // !NIVEL2_H
