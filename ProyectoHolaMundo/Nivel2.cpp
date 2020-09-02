@@ -35,12 +35,14 @@ Nivel2::Nivel2() :vida1P(100), vida2P(100), respuesta1P(-1), respuesta2P(-1), li
     respuestas[13] = 3;
 }
 bool run;
+int a;
 void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background, int currentMap)
 {
+    a = 0;
     run = true;
     int randPreg;
     int posicion = 0;
-    ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 20, 0);
+    ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 16, 0);
     ALLEGRO_EVENT event;
     ALLEGRO_EVENT_QUEUE* queue;
 
@@ -76,9 +78,6 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     //sprite1[0] = al_load_bitmap("1Psprite.png");
     //sprite1[1] = al_load_bitmap("1Psprite.png");
     //sprite1[2] = al_load_bitmap("1Psprite.png");
-
-
-    int a = 0;
     while (run) {
         if (posicion == 0) {
             randPreg = rand() % 13;
@@ -91,10 +90,10 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         al_draw_filled_rectangle(500, 50, 700, 100, al_map_rgb(0, 0, 0));
         al_draw_filled_rectangle(510, 60, ((float)vida2P / 100) * (180) + 510, 90, al_map_rgb(0, 255, 0));
         al_draw_filled_rectangle(((float)vida2P / 100) * (180) + 510, 60, 690, 90, al_map_rgb(255, 0, 0));
-        if(a!=1)
+        if (a != 1)
             al_draw_multiline_text(font2, al_map_rgb(0, 0, 0), 210, 110, 550, 40, 0, Preguntas[randPreg].c_str());
         if (a == 1) {
-            if(vida1P==0)
+            if (vida1P == 0)
                 al_draw_multiline_text(font2, al_map_rgb(0, 0, 0), 210, 110, 550, 40, 0, "Jugador 2 ha ganado!\nPresione la tecla espacio para pasar al siguiente nivel");
             else if (vida2P == 0) {
                 al_draw_multiline_text(font2, al_map_rgb(0, 0, 0), 210, 110, 550, 40, 0, "Jugador 1 ha ganado!\nPresione la tecla espacio para pasar al siguiente nivel");
@@ -132,93 +131,95 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         al_flip_display();
         al_wait_for_event(queue, &event);
 
-        switch (event.type)
-        {
-        case ALLEGRO_EVENT_KEY_DOWN:
-            if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
-                if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                    done = true;
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_1) {
-                    if (!listo1P) {
-                        respuesta1P = 0;
-                        listo1P = true;
+        if (a == 0) {
+            switch (event.type)
+            {
+            case ALLEGRO_EVENT_KEY_DOWN:
+                if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
+                    if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                        done = true;
+                        break;
                     }
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_2) {
-                    if (!listo1P) {
-                        respuesta1P = 1;
-                        listo1P = true;
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_1) {
+                        if (!listo1P) {
+                            respuesta1P = 0;
+                            listo1P = true;
+                        }
+                        break;
                     }
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_3) {
-                    if (!listo1P) {
-                        respuesta1P = 2;
-                        listo1P = true;
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_2) {
+                        if (!listo1P) {
+                            respuesta1P = 1;
+                            listo1P = true;
+                        }
+                        break;
                     }
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_4) {
-                    if (!listo1P) {
-                        respuesta1P = 3;
-                        listo1P = true;
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_3) {
+                        if (!listo1P) {
+                            respuesta1P = 2;
+                            listo1P = true;
+                        }
+                        break;
                     }
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_7) {
-                    if (!listo2P) {
-                        respuesta2P = 0;
-                        listo2P = true;
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_4) {
+                        if (!listo1P) {
+                            respuesta1P = 3;
+                            listo1P = true;
+                        }
+                        break;
                     }
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_8) {
-                    if (!listo2P) {
-                        respuesta2P = 1;
-                        listo2P = true;
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_7) {
+                        if (!listo2P) {
+                            respuesta2P = 0;
+                            listo2P = true;
+                        }
+                        break;
                     }
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_9) {
-                    if (!listo2P) {
-                        respuesta2P = 2;
-                        listo2P = true;
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_8) {
+                        if (!listo2P) {
+                            respuesta2P = 1;
+                            listo2P = true;
+                        }
+                        break;
                     }
-                    break;
-                }
-                else if (event.keyboard.keycode == ALLEGRO_KEY_0) {
-                    if (!listo2P) {
-                        respuesta2P = 3;
-                        listo2P = true;
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_9) {
+                        if (!listo2P) {
+                            respuesta2P = 2;
+                            listo2P = true;
+                        }
+                        break;
                     }
-                    break;
-                }
+                    else if (event.keyboard.keycode == ALLEGRO_KEY_0) {
+                        if (!listo2P) {
+                            respuesta2P = 3;
+                            listo2P = true;
+                        }
+                        break;
+                    }
 
+                }
+                break;
+
+            case ALLEGRO_EVENT_TIMER:
+                if (ataca1P || ataca2P) {
+                    if (++frameCount >= frameDelay)
+                    {
+                        if (++curFrame >= maxFrame) {
+                            curFrame = 0;
+                            if (ataca1P)
+                                vida2P -= 20;
+
+                            if (ataca2P)
+                                vida1P -= 20;
+
+                            ataca1P = false;
+                            ataca2P = false;
+                        }
+                        frameCount = 0;
+                    }
+                }
+                break;
             }
-            break;
-
-        case ALLEGRO_EVENT_TIMER:
-            if (ataca1P || ataca2P) {
-                if (++frameCount >= frameDelay)
-                {
-                    if (++curFrame >= maxFrame) {
-                        curFrame = 0;
-                        if (ataca1P)
-                            vida2P -= 20;
-
-                        if (ataca2P)
-                            vida1P -= 20;
-
-                        ataca1P = false;
-                        ataca2P = false;
-                    }
-                    frameCount = 0;
-                }
-            }
-            break;
         }
 
         al_clear_to_color(al_map_rgb(255, 255, 255));
@@ -342,4 +343,3 @@ void Nivel2::must_init(bool test, const char* description)
     printf("couldn't initialize %s\n", description);
     exit(1);
 }
-
