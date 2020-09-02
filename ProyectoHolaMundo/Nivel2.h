@@ -19,10 +19,10 @@ public:
 	void Logica(ALLEGRO_FONT*, ALLEGRO_COLOR, ALLEGRO_BITMAP*, int);
 	
 private:
-	int vida1P,respuesta1P, vida2P, respuesta2P;
+	int vida1P, respuesta1P, vida2P, respuesta2P;
 	bool listo1P, listo2P, ataca1P, ataca2P;
-	string Preguntas[5];
-	int respuestas[5];
+	string Preguntas[14];
+	int respuestas[14];
 	void must_init(bool, const char*);
 
 };

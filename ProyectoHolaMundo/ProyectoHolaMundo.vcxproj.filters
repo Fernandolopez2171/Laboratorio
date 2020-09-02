@@ -29,10 +29,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="Rueda.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mapa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Preguntas.h">
@@ -41,8 +41,5 @@
     <ClInclude Include="Nivel2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>
