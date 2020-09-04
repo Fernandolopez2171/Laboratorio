@@ -78,13 +78,14 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     //sprite1[0] = al_load_bitmap("1Psprite.png");
     //sprite1[1] = al_load_bitmap("1Psprite.png");
     //sprite1[2] = al_load_bitmap("1Psprite.png");
+    background = al_load_bitmap("ring.jpg");
     while (run) {
         if (posicion == 0) {
             randPreg = rand() % 13;
             posicion++;
         }
-        background = al_load_bitmap("ring.jpg");
-        al_draw_bitmap(background, 0, 0, 0);
+        
+        
         al_draw_filled_rectangle(100, 50, 300, 100, al_map_rgb(0, 0, 0));
         al_draw_filled_rectangle(110, 60, ((float)vida1P / 100) * (180) + 110, 90, al_map_rgb(0, 255, 0));
         al_draw_filled_rectangle(((float)vida1P / 100) * (180) + 110, 60, 290, 90, al_map_rgb(255, 0, 0));
@@ -224,7 +225,7 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         }
 
         al_clear_to_color(al_map_rgb(255, 255, 255));
-
+        al_draw_bitmap(background, 0, 0, 0);
         if (ataca1P)
         {
             switch (curFrame)
