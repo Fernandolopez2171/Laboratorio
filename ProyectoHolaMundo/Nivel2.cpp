@@ -83,7 +83,8 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
             randPreg = rand() % 13;
             posicion++;
         }
-        //al_draw_bitmap(background, 0, 0, 0);
+        background = al_load_bitmap("ring.jpg");
+        al_draw_bitmap(background, 0, 0, 0);
         al_draw_filled_rectangle(100, 50, 300, 100, al_map_rgb(0, 0, 0));
         al_draw_filled_rectangle(110, 60, ((float)vida1P / 100) * (180) + 110, 90, al_map_rgb(0, 255, 0));
         al_draw_filled_rectangle(((float)vida1P / 100) * (180) + 110, 60, 290, 90, al_map_rgb(255, 0, 0));
@@ -343,3 +344,5 @@ void Nivel2::must_init(bool test, const char* description)
     printf("couldn't initialize %s\n", description);
     exit(1);
 }
+
+
