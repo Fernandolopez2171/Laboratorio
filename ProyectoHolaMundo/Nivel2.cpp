@@ -1,6 +1,8 @@
 #include "Nivel2.h"
 #include <string>
 #include <stdio.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 using namespace std;
 Nivel2::Nivel2() :vida1P(100), vida2P(100), respuesta1P(-1), respuesta2P(-1), listo1P(false), listo2P(false), ataca1P(false), ataca2P(false)
 {
@@ -47,8 +49,10 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     ALLEGRO_BITMAP* reglas = al_load_bitmap("reglas_nivel2.jpeg");
     ALLEGRO_EVENT event;
     ALLEGRO_EVENT_QUEUE* queue;
-
-    
+    ALLEGRO_SAMPLE* song_empirista = NULL;
+    ALLEGRO_SAMPLE* song_racionalista = NULL;
+    ALLEGRO_SAMPLE_INSTANCE* songInstanceE = NULL;
+    ALLEGRO_SAMPLE_INSTANCE* songInstanceR = NULL;
 
     background = al_load_bitmap("ring.jpg");
     al_clear_to_color(al_map_rgb(255, 255, 255));
@@ -77,6 +81,8 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     must_init(al_init_image_addon(), "image");
     must_init(al_install_mouse(), "mouse");
     must_init(al_init_primitives_addon(), "primitives");
+    must_init(al_install_audio(), "audio");
+    must_init(al_init_acodec_addon(), "audio codec");
     al_register_event_source(queue, al_get_mouse_event_source());
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
@@ -84,6 +90,15 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
 
     ALLEGRO_BITMAP* sprite1P = al_load_bitmap("1Psprite.png");
     ALLEGRO_BITMAP* sprite2P = al_load_bitmap("2Psprite.png");
+
+    al_reserve_samples(5);
+    song_empirista = al_load_sample("song_empirista.ogg");
+    song_racionalista = al_load_sample("song_racionalista.ogg");
+
+    songInstanceE = al_create_sample_instance(song_empirista);
+    songInstanceR = al_create_sample_instance(song_racionalista);
+    al_set_sample_instance_playmode(songInstanceE, ALLEGRO_PLAYMODE_ONCE);
+    al_set_sample_instance_playmode(songInstanceR, ALLEGRO_PLAYMODE_ONCE);
 
     bool done = false;
 
@@ -117,16 +132,29 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         if (a != 1)
             al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, Preguntas[randPreg].c_str());
         if (a == 1) {
-            if (vida1P == 0)
+            if (vida1P == 0) {
                 al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, "Jugador 2 ha ganado!\nPresione la tecla espacio para pasar al siguiente nivel");
+                al_attach_sample_instance_to_mixer(songInstanceR, al_get_default_mixer());
+                al_play_sample_instance(songInstanceR);
+            }
             else if (vida2P == 0) {
                 al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, "Jugador 1 ha ganado!\nPresione la tecla espacio para pasar al siguiente nivel");
+                al_attach_sample_instance_to_mixer(songInstanceE, al_get_default_mixer());
+                al_play_sample_instance(songInstanceE);
             }
 
             switch (event.type) {
             case ALLEGRO_EVENT_KEY_DOWN:
 
                 if (event.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+                    if (vida1P == 0)
+                        al_stop_sample_instance(songInstanceR);
+                    else
+                        al_stop_sample_instance(songInstanceE);
+
+                    vida1P = 100;
+                    vida2P = 100;
+                    a = 0;
                     done = true;
                     run = false;
                 }
@@ -351,6 +379,10 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         }
 
         if (done) {
+            al_destroy_sample(song_empirista);
+            al_destroy_sample(song_racionalista);
+            al_destroy_sample_instance(songInstanceE);
+            al_destroy_sample_instance(songInstanceR);
             al_destroy_bitmap(sprite1P);
             al_destroy_bitmap(sprite2P);
             /*for (int i = 0;i < maxFrame;i++) {
