@@ -239,6 +239,7 @@ bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgroun
                             MessageBox(NULL, L"Lo sentimos no tiene suficientes puntos", L"Advertencia", MB_OK);
                         }*/
                         nivel2.Logica(font, color, background, currentMap);
+                        al_flush_event_queue(queue);
                     }
                     else if (currentMap == 3)
                     {

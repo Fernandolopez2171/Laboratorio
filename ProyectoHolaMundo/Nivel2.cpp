@@ -38,24 +38,48 @@ bool run;
 int a;
 void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background, int currentMap)
 {
+    al_rest(0.2);
     a = 0;
     run = true;
     int randPreg;
     int posicion = 0;
     ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 16, 0);
+    ALLEGRO_BITMAP* reglas = al_load_bitmap("reglas_nivel2.jpeg");
     ALLEGRO_EVENT event;
     ALLEGRO_EVENT_QUEUE* queue;
+
+    
 
     background = al_load_bitmap("ring.jpg");
     al_clear_to_color(al_map_rgb(255, 255, 255));
     queue = al_create_event_queue();
     must_init(queue, "queue");
+    must_init(al_install_keyboard(), "keyboard");
+    al_register_event_source(queue, al_get_keyboard_event_source());
+
+    al_draw_bitmap(reglas, 0, 0, 0);
+    al_flip_display();
+
+    while (true) {
+        al_wait_for_event(queue, &event);
+        if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
+            if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+                break;
+            }
+        }
+    }
+    al_flush_event_queue(queue);
+    al_clear_to_color(al_map_rgb(255, 255, 255));
+    al_destroy_bitmap(reglas);
+
     must_init(al_init_image_addon(), "image");
     must_init(al_install_mouse(), "mouse");
-    must_init(al_install_keyboard(), "keyboard");
     must_init(al_init_primitives_addon(), "primitives");
     al_register_event_source(queue, al_get_mouse_event_source());
-    al_register_event_source(queue, al_get_keyboard_event_source());
+    
+
+    
+
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
