@@ -46,7 +46,7 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     int randPreg;
     int posicion = 0;
     ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 16, 0);
-    ALLEGRO_BITMAP* reglas = al_load_bitmap("reglas_nivel2.jpeg");
+    ALLEGRO_BITMAP* reglas = al_load_bitmap("reglas_nivel2.jpg");
     ALLEGRO_EVENT event;
     ALLEGRO_EVENT_QUEUE* queue;
     ALLEGRO_SAMPLE* song_empirista = NULL;
