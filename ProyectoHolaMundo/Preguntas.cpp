@@ -6,21 +6,36 @@ Preguntas::Preguntas() {
 
 
 string Preguntas::buscarPregunta(int categoria, int _codigo) {
-	ifstream clientesIn("Nivel1.dat", ios::in);
+	ifstream NivelIn;
+	if (categoria == 0) {
+		//Arte
+		NivelIn.open("PreguntasNivel1/Arte.dat", ios::in);
+	}
+	else if (categoria==1) {
+		//Politica
+		NivelIn.open("PreguntasNivel1/Politica.dat", ios::in);
+	}
+	else if (categoria == 2) {
+		//Ciencia
+		NivelIn.open("PreguntasNivel1/Ciencia.dat", ios::in);
+	}
+	else if (categoria == 3) {
+		//Historia
+		 NivelIn.open("PreguntasNivel1/Historia.dat", ios::in);
+	}
 
-	if (!clientesIn) {
+	if (!NivelIn) {
 		return "Error al intentar abrir el archivo.";
 	}
 
 
 	int codP;
-	int Cat;
 	int p;
 	char nombre[1000];
 	string volver;
 	
-	while (clientesIn>>Cat>>codP>>nombre>>p) {
-		if (Cat==categoria && codP == _codigo)
+	while (NivelIn>>codP>>nombre>>p) {
+		if (codP == _codigo)
 		{
 			for (int x = 0; x < 1000;x++) {
 				if (nombre[x] == ' ') {
@@ -35,49 +50,76 @@ string Preguntas::buscarPregunta(int categoria, int _codigo) {
 				}
 			}
 			volver = nombre;
-			clientesIn.close();
+			NivelIn.close();
 			return volver;
 		}
 	}
-	clientesIn.close();
+	NivelIn.close();
 	return "No logro entrar revisar el archivo de texto.";
 }
 int Preguntas::cantiPreguntas(int _cat) {
-	ifstream NivelIn("Nivel1.dat", ios::in);
+	ifstream NivelIn;
+	if (_cat == 0) {
+		//Arte
+		NivelIn.open("PreguntasNivel1/Arte.dat", ios::in);
+	}
+	else if (_cat == 1) {
+		//Politica
+		NivelIn.open("PreguntasNivel1/Politica.dat", ios::in);
+	}
+	else if (_cat == 2) {
+		//Ciencia
+		NivelIn.open("PreguntasNivel1/Ciencia.dat", ios::in);
+	}
+	else if (_cat == 3) {
+		//Historia
+		NivelIn.open("PreguntasNivel1/Historia.dat", ios::in);
+	}
 
 	if (!NivelIn) {
 		return -1;
 	}
 
 	int codP;
-	int Cat;
 	int p;
 	char nombre[1000];
 	int total=0;
-	while (NivelIn >> Cat >> codP >> nombre >> p) {
-		if (Cat == _cat )
-		{
+	while (NivelIn >> codP >> nombre >> p) {
 			total=total+1;
-		}
 	}
 	NivelIn.close();
 	return total;
 }
 
 int Preguntas::obtenerRespuesta(int _cat,int _cod) {
-	ifstream NivelIn("Nivel1.dat", ios::in);
+	ifstream NivelIn;
+	if (_cat == 0) {
+		//Arte
+		NivelIn.open("PreguntasNivel1/Arte.dat", ios::in);
+	}
+	else if (_cat == 1) {
+		//Politica
+		NivelIn.open("PreguntasNivel1/Politica.dat", ios::in);
+	}
+	else if (_cat == 2) {
+		//Ciencia
+		NivelIn.open("PreguntasNivel1/Ciencia.dat", ios::in);
+	}
+	else if (_cat == 3) {
+		//Historia
+		NivelIn.open("PreguntasNivel1/Historia.dat", ios::in);
+	}
 
 	if (!NivelIn) {
 		return -1;
 	}
 
 	int codP;
-	int Cat;
 	int p;
 	char nombre[1000];
 	string volver;
-	while (NivelIn >> Cat >> codP >> nombre >> p) {
-		if (Cat == _cat && codP==_cod)
+	while (NivelIn >> codP >> nombre >> p) {
+		if (codP==_cod)
 		{
 			NivelIn.close();
 			return p;
