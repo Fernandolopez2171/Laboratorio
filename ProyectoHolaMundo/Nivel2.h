@@ -13,6 +13,8 @@
 #include <allegro5/allegro_acodec.h>
 #include <random>
 #include <stdio.h>
+#include <fstream>
+#include <iostream>
 using namespace std;
 
 class Nivel2 {
@@ -23,9 +25,11 @@ public:
 private:
 	int vida1P, respuesta1P, vida2P, respuesta2P;
 	bool listo1P, listo2P, ataca1P, ataca2P;
-	string Preguntas[14];
-	int respuestas[14];
-	void must_init(bool, const char*);
 
+	void must_init(bool, const char*);
+	//Nuevo
+	string buscarPregunta(int);
+	int cantiPreguntas();
+	int obtenerRespuesta(int);
 };
 #endif // !NIVEL2_H

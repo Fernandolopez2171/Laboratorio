@@ -2,6 +2,7 @@
 #ifndef PREGUNTAS_H
 #define PREGUNTAS_H
 #include <string>
+#include <string.h>
 #include <fstream>
 #include <iostream>
 using namespace std;

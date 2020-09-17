@@ -1,3 +1,4 @@
+
 #include "Nivel2.h"
 #include <string>
 #include <stdio.h>
@@ -6,35 +7,7 @@
 using namespace std;
 Nivel2::Nivel2() :vida1P(100), vida2P(100), respuesta1P(-1), respuesta2P(-1), listo1P(false), listo2P(false), ataca1P(false), ataca2P(false)
 {
-    Preguntas[0] = "Para Kant, cuales son los tres postulados de la razon practica:\nA. Dios, alma y mundo\nB. Vida, alma y salud\nC. Vida alma y mundo\nD. Dios, salud y mundo";
-    Preguntas[1] = "Segun los empiristas, como se adquiere el conocimiento\nA. Idea innata\nB. Tabula rasa";
-    Preguntas[2] = "Segun los racionalistas, como se adquiere el conocimiento:\nA. Idea innata\nB. Tabula rasa";
-    Preguntas[3] = "Es un empirista:\nA. Francis Bacon\nB. Descartes\nC. Spiroza\nD. Leibniz";
-    Preguntas[4] = "Es un racionalista: \nA. Francis Bacon\nB. D. Hume\nC. Descartes\nD. John Locke";
-    Preguntas[5] = "Para descartes existen tres tipos de ideas: \nA.Innatas, adventicias y facticias\nB. Innatas, simples, complejas\nC. Primarias, adventicias, complejas\nD. Complejas, innatas y facticias";
-    Preguntas[6] = "Kant distingue tres facultades de conocimiento:  \nA. Sensibilidad, Entendimiento y Razon\nB. Sensibilidad, Transcendencia y Poder\nC. Transcendecia, Entendimiento y Razon";
-    Preguntas[7] = "De que campo proceden los racionalistas: \nA. Ciencias Naturales\nB. Matematicas";
-    Preguntas[8] = "De que campo proceden los empiristas: \nA. Ciencias Naturales\nB. Matematicas";
-    Preguntas[9] = "El metodo propio del racionalismo es: \nA. Deductivo\nB. Inductivo";
-    Preguntas[10] = "El metodo propio del empirismo es:\nA. Deductivo\nB. Inductivo";
-    Preguntas[11] = "Cual era la frase celebre de Kant:\nA. Dignate a saber.\nB. Aprende a saber\nC. Atrevete a saber\nD. Aprende a conocer";
-    Preguntas[12] = "Quien fue el maestro fundamental del racionalismo? \nA. Descartes.\nB. Kant\nC. Bacon\nD. Spiroza";
-    Preguntas[13] = "Quien fue el maestro fundamental del empirismo? \nA. Descartes.\nB. Leibniz\nC. Spiroza\nD. Ninguno de los anteriores";
 
-    respuestas[0] = 0;
-    respuestas[1] = 1;
-    respuestas[2] = 0;
-    respuestas[3] = 0;
-    respuestas[4] = 2;
-    respuestas[5] = 0;
-    respuestas[6] = 0;
-    respuestas[7] = 1;
-    respuestas[8] = 0;
-    respuestas[9] = 0;
-    respuestas[10] = 1;
-    respuestas[11] = 1;
-    respuestas[12] = 0;
-    respuestas[13] = 3;
 }
 bool run;
 int a;
@@ -61,7 +34,7 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     must_init(al_install_keyboard(), "keyboard");
     al_register_event_source(queue, al_get_keyboard_event_source());
 
-    //*****************Pantalla de reglas******************//
+    //******Pantalla de reglas*******//
     al_draw_bitmap(reglas, 0, 0, 0);
     al_flip_display();
 
@@ -76,7 +49,7 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     al_flush_event_queue(queue); //flush el queue para que no hallan inputs en cola
     al_clear_to_color(al_map_rgb(255, 255, 255));
     al_destroy_bitmap(reglas); //destroy bitmap para reducir el uso de memoria
-    //*****************Fin de pantalla de reglas***************//
+    //******Fin de pantalla de reglas******//
 
     must_init(al_init_image_addon(), "image");
     must_init(al_install_mouse(), "mouse");
@@ -119,10 +92,10 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     //sprite1[2] = al_load_bitmap("1Psprite.png");
     while (run) {
         if (posicion == 0) {
-            randPreg = rand() % 13;
+            randPreg = rand() % cantiPreguntas();
             posicion++;
         }
-        
+
         al_draw_filled_rectangle(100, 50, 300, 100, al_map_rgb(0, 0, 0));
         al_draw_filled_rectangle(110, 60, ((float)vida1P / 100) * (180) + 110, 90, al_map_rgb(0, 255, 0));
         al_draw_filled_rectangle(((float)vida1P / 100) * (180) + 110, 60, 290, 90, al_map_rgb(255, 0, 0));
@@ -130,15 +103,15 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         al_draw_filled_rectangle(510, 60, ((float)vida2P / 100) * (180) + 510, 90, al_map_rgb(0, 255, 0));
         al_draw_filled_rectangle(((float)vida2P / 100) * (180) + 510, 60, 690, 90, al_map_rgb(255, 0, 0));
         if (a != 1)
-            al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, Preguntas[randPreg].c_str());
+            al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, buscarPregunta(randPreg).c_str());
         if (a == 1) {
             if (vida1P == 0) {
-                al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, "Jugador 2 ha ganado!\nPresione la tecla espacio para pasar al siguiente nivel");
+                al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, "Jugador 2 ha ganado!Felicidades!\nPresione la tecla espacio para pasar al siguiente nivel");
                 al_attach_sample_instance_to_mixer(songInstanceR, al_get_default_mixer());
                 al_play_sample_instance(songInstanceR);
             }
             else if (vida2P == 0) {
-                al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, "Jugador 1 ha ganado!\nPresione la tecla espacio para pasar al siguiente nivel");
+                al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 210, 110, 550, 40, 0, "Jugador 1 ha ganado!Felicidades!\nPresione la tecla espacio para pasar al siguiente nivel");
                 al_attach_sample_instance_to_mixer(songInstanceE, al_get_default_mixer());
                 al_play_sample_instance(songInstanceE);
             }
@@ -354,28 +327,28 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
 
         if (respuesta1P != -1 && respuesta2P != -1)
         {
-            if (respuesta1P == respuestas[randPreg] && respuesta2P != respuestas[randPreg])
+            if (respuesta1P == obtenerRespuesta(randPreg) && respuesta2P != obtenerRespuesta(randPreg))
             {
                 ataca1P = true;
             }
-            else if (respuesta1P != respuestas[randPreg] && respuesta2P == respuestas[randPreg])
+            else if (respuesta1P != obtenerRespuesta(randPreg) && respuesta2P == obtenerRespuesta(randPreg))
             {
                 ataca2P = true;
             }
-            else if (respuesta1P == respuestas[randPreg] && respuesta2P == respuestas[randPreg])
+            else if (respuesta1P == obtenerRespuesta(randPreg) && respuesta2P == obtenerRespuesta(randPreg))
             {
-
+                al_draw_text(font, al_map_rgb(255, 0, 0), 0, 110, 0, "EMPATE");
             }
-            else if (respuesta1P != respuestas[randPreg] && respuesta2P != respuestas[randPreg])
+            else if (respuesta1P != obtenerRespuesta(randPreg) && respuesta2P != obtenerRespuesta(randPreg))
             {
-
+                al_draw_text(font, al_map_rgb(255, 0, 0), 0, 110, 0, "INCORRECTO");
             }
 
             respuesta1P = -1;
             respuesta2P = -1;
             listo1P = false;
             listo2P = false;
-            posicion=0;
+            posicion = 0;
         }
 
         if (done) {
@@ -393,10 +366,83 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
     }
 }
 
+
 void Nivel2::must_init(bool test, const char* description)
 {
     if (test) return;
     printf("couldn't initialize %s\n", description);
     exit(1);
+}
+string Nivel2::buscarPregunta(int _codigo) {
+    ifstream NivelIn("PreguntasNivel2/Nivel2.dat", ios::in);
+    
+    if (!NivelIn) {
+        return "Error al intentar abrir el archivo.";
+    }
+
+    int codP;
+    int p;
+    char nombre[1000];
+    string volver;
+    while (NivelIn >> codP >> nombre >> p) {
+        if (codP == _codigo)
+        {
+            for (int x = 0; x < 1000;x++) {
+                if (nombre[x] == ' ') {
+                    volver = nombre;
+                    return volver;
+                }
+                if (nombre[x] == '-') {
+                    nombre[x] = ' ';
+                }
+                else if (nombre[x] == '/') {
+                    nombre[x] = '\n';
+                }
+            }
+            volver = nombre;
+            NivelIn.close();
+            return volver;
+        }
+    }
+    NivelIn.close();
+    return "No logro entrar revisar el archivo de texto.";
+}
+int Nivel2::cantiPreguntas() {
+    ifstream NivelIn("PreguntasNivel2/Nivel2.dat", ios::in);
+   
+    if (!NivelIn) {
+        return -1;
+    }
+
+    int codP;
+    int p;
+    char nombre[1000];
+    int total = 0;
+    while (NivelIn >> codP >> nombre >> p) {
+        total = total + 1;
+    }
+    NivelIn.close();
+    return total;
+}
+
+int Nivel2::obtenerRespuesta(int _cod) {
+    ifstream NivelIn("PreguntasNivel2/Nivel2.dat", ios::in);
+   
+    if (!NivelIn) {
+        return -1;
+    }
+
+    int codP;
+    int p;
+    char nombre[1000];
+    string volver;
+    while (NivelIn >> codP >> nombre >> p) {
+        if (codP == _cod)
+        {
+            NivelIn.close();
+            return p;
+        }
+    }
+    return -1;
 }
 

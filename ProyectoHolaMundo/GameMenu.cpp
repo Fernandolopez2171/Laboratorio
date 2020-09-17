@@ -88,9 +88,9 @@ bool estruPunt(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgrou
 
     bool done = false;
     //Cargar imagen y posicionar (Correr una vez)
-    background = al_load_bitmap("puntuacion.jpg");;
+    background = al_load_bitmap("puntuacion.jpeg");;
     al_draw_bitmap(background, 0, 0, 0);
-    al_draw_text(font, al_map_rgb(0, 0, 0), 200, 0, 0, "Puntuaciones");
+   
 
     while (true) {
         color = azul;
@@ -121,7 +121,7 @@ bool estruPunt(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgrou
                 //al precionar esc vuelve al inicio
                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     //imprimir en pantalla para comprobar que se preciono la tecla
-                    std::cout << "ESCAPE, SALIENDO...\n";
+                 
                     done = true;
                     color = azul;
                     break;
