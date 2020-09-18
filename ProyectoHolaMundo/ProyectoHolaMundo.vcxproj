@@ -91,6 +91,10 @@
     <Allegro_AddonColor>true</Allegro_AddonColor>
     <Allegro_AddonAudio>true</Allegro_AddonAudio>
     <Allegro_AddonAcodec>true</Allegro_AddonAcodec>
+    <Allegro_AddonPhysfs>true</Allegro_AddonPhysfs>
+    <Allegro_AddonDialog>true</Allegro_AddonDialog>
+    <Allegro_AddonMemfile>true</Allegro_AddonMemfile>
+    <Allegro_AddonVideo>true</Allegro_AddonVideo>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -161,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="Nivel2.cpp" />
+    <ClCompile Include="Nivel3.cpp" />
     <ClCompile Include="Preguntas.cpp" />
     <ClCompile Include="Rueda.cpp" />
   </ItemGroup>
@@ -169,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Nivel2.h" />
+    <ClInclude Include="Nivel3.h" />
     <ClInclude Include="Preguntas.h" />
     <ClInclude Include="Rueda.h" />
   </ItemGroup>

@@ -8,9 +8,11 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_video.h>
 #include "Rueda.h"
 #include "Preguntas.h"
 #include "Nivel2.h"
+#include "Nivel3.h"
 #include <time.h>
 #include <random>
 #include <windows.h> 
@@ -90,7 +92,7 @@ bool estruPunt(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgrou
     //Cargar imagen y posicionar (Correr una vez)
     background = al_load_bitmap("puntuacion.jpeg");;
     al_draw_bitmap(background, 0, 0, 0);
-   
+
 
     while (true) {
         color = azul;
@@ -121,7 +123,7 @@ bool estruPunt(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgrou
                 //al precionar esc vuelve al inicio
                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     //imprimir en pantalla para comprobar que se preciono la tecla
-                 
+
                     done = true;
                     color = azul;
                     break;
@@ -142,6 +144,7 @@ const char* PuntosS = "0";
 bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background)
 {
     Nivel2 nivel2;
+    Nivel3 nivel3;
     int currentMap = 1;
     //pantalla de mapa
     //Registro de mouse y teclado
@@ -187,7 +190,6 @@ bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgroun
                 botonVolver(font, color, background);
             }
             break;
-
             */
 
 
@@ -245,7 +247,8 @@ bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgroun
                     }
                     else if (currentMap == 3)
                     {
-                        entrarNivel3(font, color, background, currentMap);
+                        nivel3.Logica();
+                        al_flush_event_queue(queue);
                     }
                     refresh = true;
                 }
@@ -310,16 +313,16 @@ bool entrarNivel1(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backg
     int randCat;
     int randPreg;
     float targetCat;
-   
+
     background = al_load_bitmap("fondo_ruleta.jpg");
 
 
     //botonVolver(font, color, background);
     Rueda rueda(0);
-    
+
     al_start_timer(timer);
     while (true) {
-        
+
         color = azul;
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_bitmap(background, 0, 0, 0);
@@ -420,7 +423,7 @@ bool entrarNivel1(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backg
 bool displayPregunta(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* background, int cat, int pos) {
     Preguntas preguntas;
     ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 18, 0);
- 
+
     al_clear_to_color(al_map_rgb(0, 0, 0));
     queue = al_create_event_queue();
     must_init(queue, "queue");
@@ -633,7 +636,6 @@ int main()
     al_init();
     al_init_font_addon();
     al_init_ttf_addon();
-
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 5; j++) {
             preguntaRepetida[i][j] = false;
@@ -645,6 +647,7 @@ int main()
 
     ALLEGRO_FONT* font = al_load_ttf_font("YARDSALE.ttf", 64, 0);
     ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 36, 0);
+    ALLEGRO_FONT* font3 = al_load_ttf_font("YARDSALE.ttf", 18, 0);
 
     queue = al_create_event_queue();
     must_init(queue, "queue");
@@ -652,8 +655,82 @@ int main()
     must_init(al_init_image_addon(), "filo_background");
 
     must_init(al_install_mouse(), "mouse");
-
+    must_init(al_install_keyboard(), "keyboard");
+    al_register_event_source(queue, al_get_keyboard_event_source());
     must_init(al_init_primitives_addon(), "primitives");
+
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 25.0);
+    al_register_event_source(queue, al_get_timer_event_source(timer));
+    must_init(al_init_video_addon(), "video");
+    ALLEGRO_VIDEO* intro = al_open_video("Intro.ogv");
+    al_register_event_source(queue, al_get_video_event_source(intro));
+    al_start_video(intro, al_get_default_mixer());
+
+    bool redraw = true;
+    bool use_frame_events = false;
+    bool videoEnd = false;
+    //al_set_video_playing(intro, !al_is_video_playing(intro));
+    al_start_timer(timer);
+    ALLEGRO_BITMAP* frame = al_create_bitmap(al_get_video_scaled_width(intro), al_get_video_scaled_height(intro));
+    while (true)
+    {
+
+        frame = al_get_video_frame(intro);
+        if (frame)
+            al_draw_scaled_bitmap(frame, 0, 0, 1280, 720, 0, 0, 800, 450, 0);
+        else
+            cout << "Null";
+
+        al_draw_text(font3, al_map_rgb(255, 255, 255), 0, 0, 0, "Presiona Esc para saltar");
+        al_wait_for_event(queue, &event);
+        switch (event.type) {
+        case ALLEGRO_EVENT_KEY_DOWN:
+            switch (event.keyboard.keycode) {
+            case ALLEGRO_KEY_SPACE:
+
+                //al_set_video_playing(intro, !al_is_video_playing(intro));
+                break;
+            case ALLEGRO_KEY_ESCAPE:
+                al_close_video(intro);
+                videoEnd = true;
+                break;
+            default:
+                break;
+            }
+            break;
+
+        case ALLEGRO_EVENT_TIMER:
+            /*
+            display_time += 1.0 / 60;
+            if (display_time >= video_time) {
+               video_time = display_time + video_refresh_timer(is);
+            }*/
+            /*if (!use_frame_events) {
+                redraw = true;
+            }*/
+            break;
+
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            al_close_video(intro);
+            break;
+
+        case ALLEGRO_EVENT_VIDEO_FRAME_SHOW:
+            if (use_frame_events) {
+                redraw = true;
+            }
+            break;
+
+        case ALLEGRO_EVENT_VIDEO_FINISHED:
+            videoEnd = true;
+            break;
+        default:
+            break;
+        }
+        al_flip_display();
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        if (videoEnd)
+            break;
+    }
 
     ALLEGRO_BITMAP* background = al_load_bitmap("castillo1.jpg");
     if (!background)
