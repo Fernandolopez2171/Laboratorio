@@ -255,6 +255,7 @@ void Nivel2::Logica(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* bac
         al_draw_bitmap(background, 0, 0, 0);
         if (ataca1P)
         {
+            //
             al_draw_text(font2, al_map_rgb(255, 0, 0),260, 0, 0, "Jugador 1, Respondio bien");
             switch (curFrame)
             {
