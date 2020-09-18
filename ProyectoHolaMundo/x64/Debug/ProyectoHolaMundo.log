@@ -1,5 +1,2 @@
-﻿  GameMenu.cpp
-  Nivel2.cpp
-  Generando código...
-C:\Users\wolfs\Desktop\Nueva carpeta\ProyectoHolaMundo\GameMenu.cpp(417): warning C4715: 'entrarNivel1': no todas las rutas de acceso de control devuelven un valor
+﻿  Nivel2.cpp
   ProyectoHolaMundo.vcxproj -> C:\Users\wolfs\Desktop\Nueva carpeta\x64\Debug\ProyectoHolaMundo.exe
