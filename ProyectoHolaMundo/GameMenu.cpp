@@ -205,7 +205,6 @@ bool estruMap(ALLEGRO_FONT* font, ALLEGRO_COLOR color, ALLEGRO_BITMAP* backgroun
                 //al precionar esc vuelve al inicio
                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     //imprimir en pantalla para comprobar que se preciono la tecla
-                    std::cout << "ESCAPE, SALIENDO...\n";
                     done = true;
                     color = azul;
                     break;

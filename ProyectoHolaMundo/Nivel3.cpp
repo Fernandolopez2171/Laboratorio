@@ -214,8 +214,8 @@ void Nivel3::jugar(bool kant)
     ALLEGRO_EVENT_QUEUE* queue;
     ALLEGRO_BITMAP* fondo = nullptr;
     ALLEGRO_BITMAP* fondo2 = al_load_bitmap("pasillo.jpg");
-    ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 20, 0);
-    ALLEGRO_FONT* font3 = al_load_ttf_font("YARDSALE.ttf", 36, 0);
+    ALLEGRO_FONT* font2 = al_load_ttf_font("YARDSALE.ttf", 16, 0);
+    ALLEGRO_FONT* font3 = al_load_ttf_font("YARDSALE.ttf", 34, 0);
 
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -250,7 +250,7 @@ void Nivel3::jugar(bool kant)
         al_draw_bitmap(fondo, 0, 0, 0);
         // al_draw_filled_rectangle(200, 200, 350, 250, al_map_rgb(0, 0, 0));
          //al_draw_text(font, al_map_rgb(255, 255, 255), 660, 60, 0, "");
-        al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 200, 100, 550, 40, 0, buscarPregunta(pregunta, kant).c_str());
+        al_draw_multiline_text(font2, al_map_rgb(255, 255, 255), 140, 100, 550, 40, 0, buscarPregunta(pregunta, kant).c_str());
 
         al_wait_for_event(queue, &event);
         switch (event.type)
