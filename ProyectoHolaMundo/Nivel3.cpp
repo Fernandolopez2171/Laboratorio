@@ -172,6 +172,10 @@ string Nivel3::buscarPregunta(int _codigo, bool kant) {
             }
             
         } while (NivelIn.get(salto));
+        if (codP == _codigo + 1) {
+            NivelIn.close();
+            return volver;
+        }
     }
     NivelIn.close();
     return "No logro entrar revisar el archivo de texto.";
