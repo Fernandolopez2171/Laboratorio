@@ -393,75 +393,129 @@ void Nivel2::must_init(bool test, const char* description)
     exit(1);
 }
 string Nivel2::buscarPregunta(int _codigo) {
-    ifstream NivelIn("PreguntasNivel2/Nivel2.dat", ios::in);
+    ifstream NivelIn("PreguntasNivel2/Nivel2N.dat", ios::in);
     
     if (!NivelIn) {
         return "Error al intentar abrir el archivo.";
     }
 
     int codP;
-    int p;
-    char nombre[1000];
-    string volver;
-    while (NivelIn >> codP >> nombre >> p) {
-        if (codP == _codigo)
+    int respuesta;
+    char nombre[10000];
+    char salto = ' ';
+    string volver = "";
+    string aux;
+    while (NivelIn >> codP >> respuesta) {
+        do
         {
-            for (int x = 0; x < 1000;x++) {
-                if (nombre[x] == ' ') {
-                    volver = nombre;
+            if (salto == '\n') {
+                if (codP == _codigo + 1) {
+                    NivelIn.close();
                     return volver;
                 }
-                if (nombre[x] == '-') {
-                    nombre[x] = ' ';
-                }
-                else if (nombre[x] == '/') {
-                    nombre[x] = '\n';
+                else {
+                    volver = "";
+                    salto = ' ';
+                    break;
                 }
             }
-            volver = nombre;
-            NivelIn.close();
-            return volver;
-        }
+            NivelIn >> aux;
+            if (strcmp(aux.c_str(), "A)") == 0)
+            {
+                volver += "\n" + aux + " ";
+            }
+            else if (strcmp(aux.c_str(), "B)") == 0)
+            {
+                volver += "\n" + aux + " ";
+            }
+            else if (strcmp(aux.c_str(), "C)") == 0)
+            {
+                volver += "\n" + aux + " ";
+            }
+            else if (strcmp(aux.c_str(), "D)") == 0)
+            {
+                volver += "\n" + aux + " ";
+            }
+            else
+            {
+                volver += aux + " ";
+            }
+
+        } while (NivelIn.get(salto));
     }
     NivelIn.close();
     return "No logro entrar revisar el archivo de texto.";
 }
 int Nivel2::cantiPreguntas() {
-    ifstream NivelIn("PreguntasNivel2/Nivel2.dat", ios::in);
+    ifstream NivelIn("PreguntasNivel2/Nivel2N.dat", ios::in);
    
     if (!NivelIn) {
         return -1;
     }
 
     int codP;
-    int p;
-    char nombre[1000];
+    int respuesta;
     int total = 0;
-    while (NivelIn >> codP >> nombre >> p) {
-        total = total + 1;
+    char nombre[10000];
+    char salto = ' ';
+    string volver = "";
+    string aux;
+    while (NivelIn >> codP >> respuesta) {
+        total++;
+        do
+        {
+            if (salto == '\n') {
+                {
+                    volver = "";
+                    salto = ' ';
+                    break;
+                }
+            }
+            NivelIn >> aux;
+
+            volver += aux + " ";
+
+        } while (NivelIn.get(salto));
     }
     NivelIn.close();
     return total;
 }
 
 int Nivel2::obtenerRespuesta(int _cod) {
-    ifstream NivelIn("PreguntasNivel2/Nivel2.dat", ios::in);
+    ifstream NivelIn("PreguntasNivel2/Nivel2N.dat", ios::in);
    
     if (!NivelIn) {
+        cout << "Error al intentar abrir el archivo.";
         return -1;
     }
 
     int codP;
-    int p;
-    char nombre[1000];
-    string volver;
-    while (NivelIn >> codP >> nombre >> p) {
-        if (codP == _cod)
+    int respuesta;
+    char nombre[10000];
+    char salto = ' ';
+    string volver = "";
+    string aux;
+    while (NivelIn >> codP >> respuesta) {
+        do
         {
-            NivelIn.close();
-            return p;
-        }
+            if (salto == '\n') {
+                if (codP == _cod + 1) {
+                    NivelIn.close();
+                    return (respuesta - 1);
+                }
+                else {
+                    volver = "";
+                    salto = ' ';
+                    break;
+                }
+            }
+            NivelIn >> aux;
+
+            volver += aux + " ";
+
+        } while (NivelIn.get(salto));
     }
+    NivelIn.close();
     return -1;
 }
 

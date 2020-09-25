@@ -28,31 +28,49 @@ string Preguntas::buscarPregunta(int categoria, int _codigo) {
 		return "Error al intentar abrir el archivo.";
 	}
 
-
 	int codP;
-	int p;
-	char nombre[1000];
-	string volver;
-	
-	while (NivelIn>>codP>>nombre>>p) {
-		if (codP == _codigo)
+	int respuesta;
+	char nombre[10000];
+	char salto = ' ';
+	string volver = "";
+	string aux;
+	while (NivelIn >> codP >> respuesta) {
+		do
 		{
-			for (int x = 0; x < 1000;x++) {
-				if (nombre[x] == ' ') {
-					volver = nombre;
+			if (salto == '\n') {
+				if (codP == _codigo + 1) {
+					NivelIn.close();
 					return volver;
 				}
-				if (nombre[x] == '-') {
-					nombre[x] = ' ';
-				}
-				else if (nombre[x] == '/') {
-					nombre[x] = '\n';
+				else {
+					volver = "";
+					salto = ' ';
+					break;
 				}
 			}
-			volver = nombre;
-			NivelIn.close();
-			return volver;
-		}
+			NivelIn >> aux;
+			if (strcmp(aux.c_str(), "1)") == 0)
+			{
+				volver += "\n" + aux + " ";
+			}
+			else if (strcmp(aux.c_str(), "2)") == 0)
+			{
+				volver += "\n" + aux + " ";
+			}
+			else if (strcmp(aux.c_str(), "3)") == 0)
+			{
+				volver += "\n" + aux + " ";
+			}
+			else if (strcmp(aux.c_str(), "4)") == 0)
+			{
+				volver += "\n" + aux + " ";
+			}
+			else
+			{
+				volver += aux + " ";
+			}
+
+		} while (NivelIn.get(salto));
 	}
 	NivelIn.close();
 	return "No logro entrar revisar el archivo de texto.";
@@ -81,11 +99,28 @@ int Preguntas::cantiPreguntas(int _cat) {
 	}
 
 	int codP;
-	int p;
-	char nombre[1000];
-	int total=0;
-	while (NivelIn >> codP >> nombre >> p) {
-			total=total+1;
+	int respuesta;
+	int total = 0;
+	char nombre[10000];
+	char salto = ' ';
+	string volver = "";
+	string aux;
+	while (NivelIn >> codP >> respuesta) {
+		total++;
+		do
+		{
+			if (salto == '\n') {
+				{
+					volver = "";
+					salto = ' ';
+					break;
+				}
+			}
+			NivelIn >> aux;
+
+			volver += aux + " ";
+
+		} while (NivelIn.get(salto));
 	}
 	NivelIn.close();
 	return total;
@@ -115,15 +150,31 @@ int Preguntas::obtenerRespuesta(int _cat,int _cod) {
 	}
 
 	int codP;
-	int p;
-	char nombre[1000];
-	string volver;
-	while (NivelIn >> codP >> nombre >> p) {
-		if (codP==_cod)
+	int respuesta;
+	char nombre[10000];
+	char salto = ' ';
+	string volver = "";
+	string aux;
+	while (NivelIn >> codP >> respuesta) {
+		do
 		{
-			NivelIn.close();
-			return p;
-		}
+			if (salto == '\n') {
+				if (codP == _cod + 1) {
+					NivelIn.close();
+					return (respuesta - 1);
+				}
+				else {
+					volver = "";
+					salto = ' ';
+					break;
+				}
+			}
+			NivelIn >> aux;
+
+			volver += aux + " ";
+
+		} while (NivelIn.get(salto));
 	}
+	NivelIn.close();
 	return -1;
 }

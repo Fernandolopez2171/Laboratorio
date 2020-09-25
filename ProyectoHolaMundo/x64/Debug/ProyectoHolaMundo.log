@@ -1,2 +1,5 @@
-﻿  Nivel3.cpp
-  ProyectoHolaMundo.vcxproj -> C:\Users\wolfs\Desktop\Nueva carpeta\x64\Debug\ProyectoHolaMundo.exe
+﻿  Nivel2.cpp
+C:\Users\Eduardo\source\repos\Laboratorio\ProyectoHolaMundo\Nivel2.cpp(404,10): warning C4101: 'nombre': unreferenced local variable
+C:\Users\Eduardo\source\repos\Laboratorio\ProyectoHolaMundo\Nivel2.cpp(459,10): warning C4101: 'nombre': unreferenced local variable
+C:\Users\Eduardo\source\repos\Laboratorio\ProyectoHolaMundo\Nivel2.cpp(494,10): warning C4101: 'nombre': unreferenced local variable
+  ProyectoHolaMundo.vcxproj -> C:\Users\Eduardo\source\repos\Laboratorio\x64\Debug\ProyectoHolaMundo.exe

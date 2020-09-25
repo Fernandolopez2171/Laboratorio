@@ -119,9 +119,9 @@ string Nivel3::buscarPregunta(int _codigo, bool kant) {
     ifstream NivelIn;
 
     if (kant)
-        NivelIn.open("PreguntasNivel3/Nivel3-kant.dat", ios::in);
+        NivelIn.open("PreguntasNivel3/Nivel3-kantN.dat", ios::in);
     else
-        NivelIn.open("PreguntasNivel3/Nivel3-descartes.dat", ios::in);
+        NivelIn.open("PreguntasNivel3/Nivel3-descartesN.dat", ios::in);
 
 
 
@@ -130,28 +130,48 @@ string Nivel3::buscarPregunta(int _codigo, bool kant) {
     }
 
     int codP;
-    int p;
-    char nombre[1000];
-    string volver;
-    while (NivelIn >> codP >> nombre >> p) {
-        if (codP == _codigo)
+    int respuesta;
+    char nombre[10000];
+    char salto = ' ';
+    string volver="";
+    string aux;
+    while (NivelIn >> codP >> respuesta) {
+        do
         {
-            for (int x = 0; x < 1000; x++) {
-                if (nombre[x] == ' ') {
-                    volver = nombre;
+            if (salto == '\n') {
+                if (codP == _codigo + 1) {
+                    NivelIn.close();
                     return volver;
                 }
-                if (nombre[x] == '-') {
-                    nombre[x] = ' ';
-                }
-                else if (nombre[x] == '/') {
-                    nombre[x] = '\n';
+                else {
+                    volver = "";
+                    salto = ' ';
+                    break;
                 }
             }
-            volver = nombre;
-            NivelIn.close();
-            return volver;
-        }
+            NivelIn >> aux;
+            if (strcmp(aux.c_str(), "1)")==0)
+            {
+                volver +="\n"+ aux + " ";
+            }
+            else if (strcmp(aux.c_str(), "2)") == 0)
+            {
+                volver += "\n" + aux + " ";
+            }
+            else if (strcmp(aux.c_str(), "3)") == 0)
+            {
+                volver += "\n" + aux + " ";
+            }
+            else if (strcmp(aux.c_str(), "4)") == 0)
+            {
+                volver += "\n" + aux + " ";
+            }
+            else
+            {
+                volver += aux + " ";
+            }
+            
+        } while (NivelIn.get(salto));
     }
     NivelIn.close();
     return "No logro entrar revisar el archivo de texto.";
@@ -186,25 +206,42 @@ int Nivel3::obtenerRespuesta(int _cod, bool kant) {
     ifstream NivelIn;
 
     if (kant)
-        NivelIn.open("PreguntasNivel3/Nivel3-kant.dat", ios::in);
+        NivelIn.open("PreguntasNivel3/Nivel3-kantN.dat", ios::in);
     else
-        NivelIn.open("PreguntasNivel3/Nivel3-descartes.dat", ios::in);
+        NivelIn.open("PreguntasNivel3/Nivel3-descartesN.dat", ios::in);
 
     if (!NivelIn) {
+        cout<< "Error al intentar abrir el archivo.";
         return -1;
     }
 
     int codP;
-    int p;
-    char nombre[1000];
-    string volver;
-    while (NivelIn >> codP >> nombre >> p) {
-        if (codP == _cod)
+    int respuesta;
+    char nombre[10000];
+    char salto = ' ';
+    string volver = "";
+    string aux;
+    while (NivelIn >> codP >> respuesta) {
+        do
         {
-            NivelIn.close();
-            return p;
-        }
+            if (salto == '\n') {
+                if (codP == _cod + 1) {
+                    NivelIn.close();
+                    return (respuesta-1);
+                }
+                else {
+                    volver = "";
+                    salto = ' ';
+                    break;
+                }
+            }
+            NivelIn >> aux;
+
+            volver += aux + " ";
+
+        } while (NivelIn.get(salto));
     }
+    NivelIn.close();
     return -1;
 }
 
