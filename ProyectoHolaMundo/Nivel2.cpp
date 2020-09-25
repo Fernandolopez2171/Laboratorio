@@ -442,6 +442,10 @@ string Nivel2::buscarPregunta(int _codigo) {
             }
 
         } while (NivelIn.get(salto));
+        if (codP == _codigo + 1) {
+            NivelIn.close();
+            return volver;
+        }
     }
     NivelIn.close();
     return "No logro entrar revisar el archivo de texto.";
